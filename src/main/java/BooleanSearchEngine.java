@@ -12,17 +12,9 @@ import java.util.stream.Stream;
 
 public class BooleanSearchEngine implements SearchEngine {
     private final Map<String, List<PageEntry>> words;
-    private static final List<String> stopWords;
-
-    static {
-        try {
-            stopWords = Files.readAllLines(Paths.get("stop-ru.txt"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public BooleanSearchEngine(File pdfsDir) throws IOException {
+        List<String> stopWords = Files.readAllLines(Paths.get(Main.STOP_WORDS_FILE_PATH));
         List<File> PDFList = List.of(Objects.requireNonNull(pdfsDir.listFiles()));
         words = new HashMap<>();
         for (File pdf : PDFList) {
@@ -50,7 +42,6 @@ public class BooleanSearchEngine implements SearchEngine {
                 freqs.clear();
             }
         }
-
     }
 
     @Override
@@ -75,6 +66,5 @@ public class BooleanSearchEngine implements SearchEngine {
         });
         Collections.sort(result);
         return result;
-
     }
 }
