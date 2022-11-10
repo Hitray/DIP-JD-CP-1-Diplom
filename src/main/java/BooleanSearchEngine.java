@@ -34,9 +34,9 @@ public class BooleanSearchEngine implements SearchEngine {
                 }
                 int count;
                 for (var word : freqs.keySet()) {
-                    if (freqs.get(word.toLowerCase()) != null) {
-                        count = freqs.get(word.toLowerCase());
-                        this.words.computeIfAbsent(word.toLowerCase(), w -> new ArrayList<>()).add(new PageEntry(pdf.getName(), i + 1, count));
+                    if (freqs.containsKey(word)) {
+                        count = freqs.get(word);
+                        this.words.computeIfAbsent(word, w -> new ArrayList<>()).add(new PageEntry(pdf.getName(), i + 1, count));
                     }
                 }
                 freqs.clear();
@@ -48,10 +48,10 @@ public class BooleanSearchEngine implements SearchEngine {
     public List<PageEntry> search(String word) {
         List<PageEntry> tempList = new ArrayList<>();
         List<PageEntry> result = new ArrayList<>();
-        String[] request = word.split("\\P{IsAlphabetic}+");
+        String[] request = word.toLowerCase().split("\\P{IsAlphabetic}+");
         for (String newRequest : request) {
-            if (words.get(newRequest.toLowerCase()) != null) {
-                tempList.addAll(words.get(newRequest.toLowerCase()));
+            if (words.get(newRequest) != null) {
+                tempList.addAll(words.get(newRequest));
             }
         }
         Map<String, Map<Integer, Integer>> pageNumberAndCounter = new HashMap<>();
